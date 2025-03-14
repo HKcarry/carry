@@ -1,15 +1,3 @@
-// ==UserScript==
-// @name         白名单检测
-// @namespace    http://tampermonkey.net/
-// @version      1.4
-// @description  检测网页域名是否在白名单内，并在页面加载前显示匹配项。
-// @match        *://*/*
-// @exclude      *://*.baidu.com/*
-// @exclude      *://*.qq.com/*
-// @grant        none
-// @run-at       document-ready
-// ==/UserScript==
-
 (function() {
     'use strict';
 
