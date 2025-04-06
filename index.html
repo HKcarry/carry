@@ -1,16 +1,134 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>示例页面</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多引擎搜索</title>
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+
+        .search-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+            text-align: center;
+            animation: fadeIn 1s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        input[type="text"] {
+            width: 95%;
+            padding: 22px;
+            margin: 20px 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 22px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.9);
+        }
+
+        button {
+            padding: 22px 45px;
+            background: linear-gradient(45deg, #00f260, #0575e6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 22px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.9);
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
 </head>
-
 <body>
-  <h1>欢迎来到示例页面X</h1>
-  <p>这是一个简单的 HTML 页面示例。</p>
-  <a href="https://www.example.com">访问示例网站</a>
-</body>
+    <div class="search-container" id="searchContainer">
+        <input type="text" id="searchQuery" placeholder="输入搜索内容">
+        <button id="searchButton">搜索</button>
+    </div>
 
+    <script>
+        // 提前缓存 DOM 元素
+        const searchQuery = document.getElementById('searchQuery');
+        const searchContainer = document.getElementById('searchContainer');
+        const searchButton = document.getElementById('searchButton');
+
+        // 生成搜索 URL 的函数
+        function generateSearchUrls(query) {
+            const encodedQuery = encodeURIComponent(query);
+            return [
+                `https://www.baidu.com/s?wd=${encodedQuery}`,
+                `https://www.google.com/search?q=${encodedQuery}`,
+                `https://www.bing.com/search?q=${encodedQuery}`
+            ];
+        }
+
+        // 打开搜索页面的函数
+        function openSearchPages(urls) {
+            urls.forEach(url => {
+                try {
+                    window.open(url, '_blank');
+                } catch (error) {
+                    console.error(`无法打开 ${url}:`, error);
+                }
+            });
+        }
+
+        // 搜索事件处理函数
+        function handleSearch() {
+            const query = searchQuery.value;
+            if (query.trim() === '') {
+                alert('请输入搜索内容');
+                return;
+            }
+            searchContainer.classList.add('loading');
+            setTimeout(() => {
+                searchContainer.classList.remove('loading');
+            }, 2000);
+            const searchUrls = generateSearchUrls(query);
+            openSearchPages(searchUrls);
+        }
+
+        // 绑定事件监听器
+        searchButton.addEventListener('click', handleSearch);
+    </script>
+</body>
 </html>
